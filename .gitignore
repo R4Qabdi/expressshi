@@ -3,4 +3,4 @@ postman/
 .postman/
 .env.local
 .env
-/generated/prisma
+generated/prisma

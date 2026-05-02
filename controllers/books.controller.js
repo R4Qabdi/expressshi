@@ -1,3 +1,7 @@
+
+// import { isCategoryExist } from './categories.controllers.js'
+import prisma from '../database/config.database.js'
+
 export const getBooks = async (req, res) => {
   const books = await prisma.books.findMany()
   sendResponse(res, 200, true, "Books retrieved successfully", books);

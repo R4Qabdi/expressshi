@@ -1,6 +1,6 @@
 // categories.controller.js
 
-// import prisma from '../database/config.database.js'
+import prisma from '../database/config.database.js'
 
 export const getCategories = async (req, res) => {
   const Categories = await prisma.categories.findMany()

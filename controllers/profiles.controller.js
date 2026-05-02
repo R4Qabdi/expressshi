@@ -1,6 +1,6 @@
 // profiles.controller.js
 
-// import prisma from '../database/config.database.js'
+import prisma from '../database/config.database.js'
 
 export const getProfiles = async (req, res) => {
   const profiles = await prisma.profiles.findMany()
