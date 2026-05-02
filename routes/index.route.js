@@ -3,6 +3,7 @@ import prisma from '../database.js'
 import booksRoute from './books.route.js'
 import usersRoute from './users.route.js'
 import profileRoute from './profiles.route.js'
+import borrowingRoute from './borrowings.route.js'
 
 const router = express.Router()
 
@@ -13,5 +14,6 @@ router.get('/', (req, res) => {
 router.use('/books', booksRoute)
 router.use('/users', usersRoute)
 router.use('/profiles', profileRoute)
+// router.use('/borrowings', borrowingsRoute)
 
 export default router

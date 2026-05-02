@@ -10,12 +10,13 @@ import {
   updateBook,
   deleteBook,
 } from '../controllers/books.controller.js'
+import {bookValidation, updateBookValidation} from '../validation/book.validation.js'
 
 router.get('/', getBooks)
 router.get('/:id', getBookById)
 router.get('/:id/books', getAllBooksByCategoryId)
-router.post('/', createBook)
-router.put('/:id', updateBook)
+router.post('/',bookValidation, createBook)
+router.put('/:id', updateBookValidation, updateBook)
 router.delete('/:id', deleteBook)
 
 export default router
