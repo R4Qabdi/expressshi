@@ -7,4 +7,8 @@ export default defineConfig({
     // For CLI tasks (migrate, pull, push), use the DIRECT URL (Port 5432)
     url: env("DIRECT_URL"), 
   },
+  migrations: {
+      path: 'prisma/migrations',
+      seed: 'node prisma/seed.js', 
+  },
 });

@@ -5,10 +5,7 @@ export const register = async (req, res) => {
   const validationErrors = validationResult(req)
 
   if (!validationErrors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      errors: validationErrors.array(),
-    })
+    return sendResponse(res, 400, false, 'Validation errors', validationErrors.array())
   }
 
   // Mendapatkan data pengguna baru dari request body
@@ -18,10 +15,7 @@ export const register = async (req, res) => {
   const count = await prisma.users.count({ where: { email } })
 
   if (count > 0) {
-    return res.status(409).json({
-      success: false,
-      error: 'Email already in use',
-    })
+    return sendResponse(res, 409, false, 'Email already in use')
   }
 
   // Meng-hash password menggunakan bcryptjs dengan jumlah salt rounds yang diambil dari environment variable
@@ -47,8 +41,12 @@ export const register = async (req, res) => {
     },
   })
 
-  res.status(201).json({
-    message: 'Registration successful',
-    user,
-  })
+  return sendResponse(res, 201, true, 'Registration successful', user)
 }
+const sendResponse = (res, statusCode, success, message, data = null) => {
+  return res.status(statusCode).json({
+    success,
+    message,
+    data
+  });
+};

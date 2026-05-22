@@ -48,17 +48,10 @@ export const getAllBooksByCategoryId = async (req, res) => {
   })
 
   if (!category) {
-    return res.json({
-      success: false,
-      message: `Category with ID: ${id} not found`,
-    })
+    return sendResponse(res, 404, false, `Category with ID: ${id} not found`)
   }
 
-  res.json({
-    success: true,
-    message: 'Books retrieved successfully',
-    data: category.books,
-  })
+  return sendResponse(res, 200, true, 'Books retrieved successfully', category.books)
 }
 
 export const createBook = async (req, res) => {
@@ -68,15 +61,12 @@ export const createBook = async (req, res) => {
   // Mengecek apakah kategori dengan ID yang diberikan ada di database menggunakan fungsi isCategoryExist
   const categoryExists = await prisma.categories.findUnique({
     where: {
-      id: id,
+      id: categoryId,
     },
   })
 
   if (!categoryExists) {
-    return res.json({
-      success: false,
-      message: `Category with ID: ${categoryId} not found`,
-    })
+    return sendResponse(res, 404, false, `Category with ID: ${categoryId} not found`)
   }
 
   // Menambahkan buku baru ke database menggunakan Prisma Client
@@ -111,24 +101,18 @@ export const updateBook = async (req, res) => {
 
   // Jika buku tidak ditemukan, kirimkan pesan error
   if (!book) {
-    return res.json({
-      success: false,
-      message: `Book with ID: ${id} not found`,
-    })
+    return sendResponse(res, 404, false, `Book with ID: ${id} not found`)
   }
 
   // Mengecek apakah kategori dengan ID yang diberikan ada di database menggunakan fungsi isCategoryExist
   const categoryExists = await prisma.categories.findUnique({
     where: {
-      id: id,
+      id: categoryId,
     },
   })
 
   if (!categoryExists) {
-    return res.json({
-      success: false,
-      message: `Category with ID: ${categoryId} not found`,
-    })
+    return sendResponse(res, 404, false, `Category with ID: ${categoryId} not found`)
   }
 
   // Mengupdate buku dengan ID yang sesuai di database menggunakan Prisma Client
@@ -164,8 +148,7 @@ export const deleteBook = async (req, res) => {
 
   // Jika buku tidak ditemukan, kirimkan pesan error
   if (!book) {
-    // res.send(`Book with ID: ${id} not found`)
-    return sendResponse(res, 404, false, `Book with ID: ${id} not found`);
+    return sendResponse(res, 404, false, `Book with ID: ${id} not found`)
   }
 
   // Menghapus buku dengan ID yang sesuai di database menggunakan Prisma Client
@@ -175,8 +158,7 @@ export const deleteBook = async (req, res) => {
     }
   })
 
-  // res.send(`Book with ID: ${id} deleted successfully`)
-  sendResponse(res, 200, true, "Book deleted successfully", null);
+  return sendResponse(res, 200, true, "Book deleted successfully", null)
 
 }
 
