@@ -13,4 +13,4 @@ const adapter = new PrismaPg(pool)
 // Pass the adapter here instead of datasourceUrl
 const prisma = new PrismaClient({ adapter })
 
-export default prisma
+export default prisma 
