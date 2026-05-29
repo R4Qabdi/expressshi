@@ -8,11 +8,13 @@ import {
   returnBook,
   deleteBorrowing,
 } from '../controllers/borrowings.controller.js'
+import { authenticateToken } from '../middlewares/auth.middleware.js'
+import { authorizeAdmin } from '../middlewares/admin.middleware.js'
 
 router.get('/', getAllBorrowings)
 router.get('/:id', getBorrowingById)
-router.post('/', createBorrowing)
-router.put('/:id/return', returnBook)
-router.delete('/', deleteBorrowing)
+router.post('/', authenticateToken, authorizeAdmin, createBorrowing)
+router.put('/:id/return', authenticateToken, authorizeAdmin, returnBook)
+router.delete('/', authenticateToken, authorizeAdmin, deleteBorrowing)
 
 export default router

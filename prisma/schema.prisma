@@ -9,10 +9,12 @@
 // }
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  // previewFeatures = ["driverAdapters"]
 }
 datasource db {
   provider  = "postgresql"
+  // url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model Users {
@@ -34,6 +36,7 @@ model Books {
   author    String
   year      Int
   available Boolean  @default(true)
+  cloudinaryId String?
   createdAt DateTime @default(now())
 
   categories   Categories? @relation(fields: [categoryId], references: [id])

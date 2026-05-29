@@ -10,12 +10,14 @@ import {
   updateProfile,
   deleteProfile
 } from '../controllers/profiles.controller.js'
+import { authenticateToken } from '../middlewares/auth.middleware.js'
+import { authorizeAdmin } from '../middlewares/admin.middleware.js'
 
 
 router.get('/', getProfiles)
 router.get('/:id', getProfileById)
-router.post('/', createProfile)
-router.put('/:id', updateProfile)
-router.delete('/:id', deleteProfile)
+router.post('/', authenticateToken, authorizeAdmin, createProfile)
+router.put('/:id', authenticateToken, authorizeAdmin, updateProfile)
+router.delete('/:id', authenticateToken, authorizeAdmin, deleteProfile)
 
 export default router   
