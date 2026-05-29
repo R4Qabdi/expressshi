@@ -6,7 +6,7 @@ export default defineConfig({
   datasource: {
     // For CLI tasks (migrate, pull, push), use the DIRECT URL (Port 5432)
     url: env("DATABASE_URL"),
-    directUrl: env("DIRECT_URL"), 
+    // directUrl: env("DIRECT_URL"), 
   },
   migrations: {
       path: 'prisma/migrations',
