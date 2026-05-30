@@ -241,3 +241,64 @@ const sendResponse = (res, statusCode, success, message, data = null) => {
     data
   });
 };
+
+export const searchBooks = async (req, res) => {
+  try {
+    const query = req.query.query?.trim()
+
+    if (!query) {
+      return sendResponse(res, 400, false, 'Search query is required')
+    }
+
+    const page = parseInt(req.query.page) || 1
+    const limit = 20
+    const skip = (page - 1) * limit
+
+    const books = await prisma.books.findMany({
+      where: {
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { author: { contains: query, mode: 'insensitive' } },
+          { isbn: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      select: {
+        id: true,
+        title: true,
+        author: true,
+        isbn: true,
+        cloudinaryId: true,
+      },
+      skip,
+      take: limit,
+    })
+
+    // add coverUrl
+    books.forEach((book) => {
+      book.coverUrl = book.cloudinaryId ? getFileUrl(book.cloudinaryId) : null
+    })
+
+    const total = await prisma.books.count({
+      where: {
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { author: { contains: query, mode: 'insensitive' } },
+          { isbn: { contains: query, mode: 'insensitive' } },
+        ]
+      }
+    })
+
+    sendResponse(res, 200, true, 'Books retrieved successfully', {
+      books,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    })
+  } catch (error) {
+    logger.error('Error searching books:', error)
+    sendResponse(res, 500, false, 'Failed to search books')
+  }
+}

@@ -8,11 +8,12 @@
 //   output   = "../generated/prisma"
 // }
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["driverAdapters"]
 }
+
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
   // url       = env("DATABASE_URL")
   // directUrl = env("DIRECT_URL")
 }
@@ -24,23 +25,26 @@ model Users {
   password  String   @db.VarChar(255)
   role      String   @default("USER")
   createdAt DateTime @default(now())
-  
-  profiles Profiles?
-  borrowings Borrowings[] 
+
+  profiles   Profiles?
+  borrowings Borrowings[]
+  reviews    Reviews[]
 }
 
 model Books {
-  id        Int      @id @default(autoincrement())
-  categoryId Int?
-  title     String
-  author    String
-  year      Int
-  available Boolean  @default(true)
+  id           Int      @id @default(autoincrement())
+  categoryId   Int?
+  title        String
+  author       String
+  isbn         String?
+  year         Int
+  available    Boolean  @default(true)
   cloudinaryId String?
-  createdAt DateTime @default(now())
+  createdAt    DateTime @default(now())
 
-  categories   Categories? @relation(fields: [categoryId], references: [id])
-  borrowings Borrowings[] 
+  categories Categories?  @relation(fields: [categoryId], references: [id])
+  borrowings Borrowings[]
+  reviews    Reviews[]
 }
 
 model Profiles {
@@ -49,14 +53,15 @@ model Profiles {
   address   String?
   phone     String?
   createdAt DateTime @default(now())
-  
+
   user Users @relation(fields: [userId], references: [id])
 }
+
 model Categories {
   id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
-  
+
   books Books[]
 }
 
@@ -70,4 +75,15 @@ model Borrowings {
   createdAt   DateTime  @default(now())
   borrower    Users     @relation(fields: [userId], references: [id])
   book        Books     @relation(fields: [bookId], references: [id])
+}
+
+model Reviews {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  user      Users    @relation(fields: [userId], references: [id])
+  book      Books    @relation(fields: [bookId], references: [id])
 }

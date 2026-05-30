@@ -4,10 +4,6 @@ import router from './routes/index.route.js'
 import pinoHttp from 'pino-http' // jangan lupa import
 import logger from './configs/logger.config.js' // jangan lupa import
 
-
-
-
-
 const app = express()
 const port = 3000
 
@@ -23,7 +19,7 @@ if (process.env.ENV !== 'production') {
 
   app.listen(port, () => {
     // Ganti dari console.log menjadai logger.info() 
-    logger.info(`Library API is running url: <http://localhost>:${port}`)
+    logger.info(`Library API is running url: <http://localhost:${port}>`)
   })
 }
 
